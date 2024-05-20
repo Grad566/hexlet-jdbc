@@ -13,9 +13,11 @@ public class Application {
                 statement.execute(sql);
             }
 
-            var sql2 = "INSERT INTO users (username, phone) VALUES ('tommy', '123456789')";
-            try (var statement2 = conn.createStatement()) {
-                statement2.executeUpdate(sql2);
+            var sql2 = "INSERT INTO users (username, phone) VALUES (?, ?)";
+            try (var preparedStatement = conn.prepareStatement(sql2)) {
+                preparedStatement.setString(1, "Goody");
+                preparedStatement.setString(2, "8912389457");
+                preparedStatement.executeUpdate();
             }
 
             var sql3 = "SELECT * FROM users";
@@ -25,6 +27,12 @@ public class Application {
                     System.out.println(resultSet.getString("username"));
                     System.out.println(resultSet.getString("phone"));
                 }
+            }
+
+            String deleteByUsernameSql = "DELETE FROM users WHERE username = ?";
+            try (var deleteByUsernameStatement = conn.prepareStatement(deleteByUsernameSql)) {
+                deleteByUsernameStatement.setString(1, "Goody");
+                deleteByUsernameStatement.executeUpdate();
             }
         }
     }
